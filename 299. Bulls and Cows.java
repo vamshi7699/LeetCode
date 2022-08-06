@@ -39,3 +39,52 @@ class Solution {
         return bulls + "A" + cows + "B";
     }
 }
+
+/**************************************************************************************************************************************************************
+Using COUNTING
+
+****************************************************************************************************************************************************************/
+
+class Solution {
+    public String getHint(String secret, String guess) {
+        int n = secret.length();
+        int[] scnt = new int[10];
+        int[] gcnt = new int[10];
+        
+        int bulls = 0;
+        int cows = 0;
+        
+        for(int i=0;i<n;i++){
+            // equals mean bulls
+            if(secret.charAt(i) == guess.charAt(i)){
+                bulls++;
+            } else {
+            // keep track of the count, which we can calculate the cows
+                scnt[secret.charAt(i)-'0']++;
+                gcnt[guess.charAt(i)-'0']++;
+            }
+        }
+        
+        for(int i=0;i<10;i++){
+            // atleast one digit should be there for the cow to be present
+            if(gcnt[i]!=0){
+                /*
+                    1. scnt[i]>gcnt[i]
+                            The same digit is there more times in secret than in guess.
+                            We can only move the digits which are in guess, we cannot genereate new
+                        We are taking the minimum
+                    2. scnt[i] == gcnt[i]
+                            We can move all the digits in guess into correct positions in secret
+                    3. scnt[i]<gcnt[i]
+                            Even if we have more digits in guess, there is nothing to match in secret
+                            So we can match what is there in secret
+                        We are taking minimum here too
+                            
+                */
+                cows += Math.min(gcnt[i], scnt[i]);
+            }
+        }
+        
+        return bulls + "A" + cows + "B";
+    }
+}
